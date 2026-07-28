@@ -34,6 +34,14 @@ export const generateRefreshToken = (payload: JwtPayload): string => {
   });
 };
 
+export const verifyEmailVerificationToken = (token: string): JwtPayload => {
+  return jwt.verify(token, env.JWT_VERIFY_EMAIL_SECRET) as JwtPayload;
+};
+
+export const verifyPasswordResetToken = (token: string): JwtPayload => {
+  return jwt.verify(token, env.JWT_RESET_PASSWORD_SECRET) as JwtPayload;
+};
+
 export const verifyAccessToken = (token: string): JwtPayload => {
   return jwt.verify(token, env.JWT_ACCESS_SECRET) as JwtPayload;
 };
