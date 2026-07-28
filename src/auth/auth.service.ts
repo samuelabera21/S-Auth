@@ -48,14 +48,18 @@ class AuthService {
     });
 
     const verificationToken =
-  generateEmailVerificationToken({
-    userId: user.id,
-  });
+   generateEmailVerificationToken({
+     userId: user.id,
+   });
 
-await sendVerificationEmail(
-  user.email,
-  verificationToken
-);
+   try {
+     await sendVerificationEmail(
+       user.email,
+       verificationToken
+     );
+   } catch (emailError) {
+     console.error("Failed to send verification email:", emailError);
+   }
 
     return user;
   }
@@ -94,10 +98,14 @@ async forgotPassword(email: string) {
       userId: user.id,
     });
 
-  await sendResetPasswordEmail(
-    user.email,
-    token
-  );
+  try {
+    await sendResetPasswordEmail(
+      user.email,
+      token
+    );
+  } catch (emailError) {
+    console.error("Failed to send reset password email:", emailError);
+  }
 }
 
 
@@ -137,6 +145,8 @@ async resetPassword(
     },
   });
 }
+
+
 
 async login(
   data: LoginDto,
