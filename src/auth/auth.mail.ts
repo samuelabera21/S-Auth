@@ -6,7 +6,7 @@ export const sendVerificationEmail = async (
   token: string
 ) => {
   const link =
-    `${env.APP_URL}/api/v1/auth/verify-email?token=${token}`;
+    `${env.CLIENT_URL}/verify-email?token=${token}`;
 
   await sendEmail(
     email,
