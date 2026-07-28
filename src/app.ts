@@ -21,13 +21,9 @@ app.use(
   })
 );
 
-
 app.use(express.json());
 app.use(cookieParser());
 app.use(morgan("dev"));
-app.use("/api/v1/users", userRoutes);
-
-app.use("/api/v1/auth", authRoutes);
 
 app.use(
   session({
@@ -39,5 +35,34 @@ app.use(
 
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.use("/api/v1/users", userRoutes);
+app.use("/api/v1/auth", authRoutes);
+
+app.use(
+  (
+    err: any,
+    _req: express.Request,
+    res: express.Response,
+    _next: express.NextFunction
+  ) => {
+    console.error("Server error:", err);
+
+    const message =
+      typeof err?.message === "string" ? err.message : "Internal server error";
+
+    const statusCode =
+      typeof err?.statusCode === "number"
+        ? err.statusCode
+        : err?.message
+          ? 400
+          : 500;
+
+    res.status(statusCode).json({
+      success: false,
+      message,
+    });
+  }
+);
 
 export default app;
