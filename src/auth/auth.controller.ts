@@ -237,6 +237,13 @@ export const verifyEmail = async (
   try {
     const token = req.query.token as string;
 
+    if (!token) {
+      return res.status(400).json({
+        success: false,
+        message: "Verification token is missing",
+      });
+    }
+
     await authService.verifyEmail(token);
 
     res.json({
@@ -244,6 +251,7 @@ export const verifyEmail = async (
       message: "Email verified successfully",
     });
   } catch (error) {
+    console.error("Verify email error:", error);
     next(error);
   }
 };
